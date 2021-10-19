@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { ITodosState, ITodo } from './types';
-import { fetchTodos, addTodo, deleteTodo } from './operations';
+import { fetchTodos } from './operations';
 
 const getInitialTodoState = () => {
   const savedTodos = localStorage.getItem('todos');
@@ -16,7 +16,11 @@ const initialState = {
 const todosSlice = createSlice({
   name: 'todos',
   initialState,
-  reducers: {},
+  reducers: {
+    addTodo(state, { payload }) {
+          state.todos.push(...payload);
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchTodos.pending, state => {
@@ -59,8 +63,6 @@ const todosSlice = createSlice({
     //   });
   },
 });
-
-console.log(todosSlice);
 
 export default todosSlice.reducer;
 

@@ -15,27 +15,30 @@ const axiosInstance = axios.create({
 
 export const fetchTodos = createAsyncThunk(
   'todos',
-  async () => {
-    const { data } = await axiosInstance.get('');
-    return data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.get('');
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error);
+    }
   },
-  //     try {
-  //
-  //     } catch (error: any) {
-  //       return rejectWithValue(error);
-  //     }
-  //   },
 );
 
-export const addTodo = createAsyncThunk('todos', async payload => {
-  return await axiosInstance.post('', payload);
+export const addTodo = createAsyncThunk(
+  'todos',
+  async (todo, { rejectWithValue }) => {
+    try {
+      return await axiosInstance.post('', todo);
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
+export const deleteTodo = createAsyncThunk('todos', async todo => {
+  return await axiosInstance.delete(`/${todo}`);
 });
-
-export const deleteTodo = createAsyncThunk('todos', async (payload: PayloadAction<ITodoId>) => {
-  return await axiosInstance.delete(`/${payload}`);
-});
-
-
 
 // const asyncThunkAction: ActionCreator<ThunkAction<Promise<Action>, Todo, void>> = () => {
 //     return async (dispatch: Dispatch<Todo>): Promise<Action> => {
